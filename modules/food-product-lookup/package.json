@@ -1,0 +1,71 @@
+{
+  "name": "@xpell/food-product-lookup",
+  "version": "0.1.0",
+  "description": "Reusable Xpell package for packaged food barcode lookup and browser barcode scanning.",
+  "type": "module",
+  "main": "./dist/src/index.js",
+  "module": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/src/index.js"
+    },
+    "./server": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/src/index.js"
+    },
+    "./client": {
+      "types": "./dist/src/client/index.d.ts",
+      "import": "./dist/src/client/index.js"
+    },
+    "./shared": {
+      "types": "./dist/src/shared/index.d.ts",
+      "import": "./dist/src/shared/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "package.json"
+  ],
+  "scripts": {
+    "build": "tsc -p .",
+    "test": "npm run build && node dist/tests/FoodProductLookupModule.test.js && node dist/tests/BarcodeScannerClientModule.test.js",
+    "smoke:open-food-facts": "npm run build && node dist/tests/OpenFoodFactsSmoke.test.js"
+  },
+  "keywords": [
+    "xpell",
+    "xnode",
+    "xmodule",
+    "server-module",
+    "food",
+    "barcode",
+    "open-food-facts"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@xpell/core": "workspace:*",
+    "@xpell/ui": "workspace:*",
+    "@xpell/node": "workspace:*",
+    "@types/node": "^22.0.0",
+    "typescript": "^5.9.3"
+  },
+  "peerDependencies": {
+    "@xpell/core": ">=2.0.0",
+    "@xpell/node": ">=2.0.0",
+    "@xpell/ui": ">=2.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@xpell/node": {
+      "optional": true
+    },
+    "@xpell/ui": {
+      "optional": true
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

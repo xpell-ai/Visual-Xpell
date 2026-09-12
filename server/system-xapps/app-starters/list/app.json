@@ -1,0 +1,159 @@
+{
+  "_app_id": "list-starter",
+  "_env": "default",
+  "_title": "List / Tracker Starter",
+  "_system": false,
+  "_readonly": false,
+  "_version": 1,
+  "_meta": {
+    "_entry_view_id": "main",
+    "_starter": {
+      "_id": "list",
+      "_title": "List / Tracker Starter",
+      "_description": "A clean reusable foundation for lists, trackers, checklists, and lightweight record-management apps.",
+      "_keywords": [
+        "list",
+        "tracker",
+        "items",
+        "records",
+        "checklist",
+        "personal",
+        "management"
+      ],
+      "_archetypes": [
+        "personal_list",
+        "personal_utility",
+        "list_or_tracker",
+        "record_management"
+      ],
+      "_entry_view": "main",
+      "_adaptation_strategy": {
+        "_mode": "none",
+        "_summary": "The reusable list shell is already a valid host for primary-experience composition and does not require a separate starter cleanup phase."
+      },
+      "_primary_experience": {
+        "_mode": "host-existing-experience",
+        "_required": [
+          "_entry_view_id",
+          "_content_container_id",
+          "_page_title_id",
+          "_page_subtitle_id",
+          "_primary_action_id",
+          "_search_id",
+          "_status_filter_id",
+          "_main_list_region_id",
+          "_theme_selector_id"
+        ],
+        "_optional": [
+          "_history_region_id"
+        ],
+        "_entry_view_id": "main",
+        "_content_container_id": "list-starter-primary-content",
+        "_page_title_id": "list-starter-header",
+        "_page_subtitle_id": "list-starter-header",
+        "_primary_action_id": "list-starter-primary-action",
+        "_search_id": "list-starter-search",
+        "_status_filter_id": "list-starter-status-filter",
+        "_main_list_region_id": "list-starter-list-region",
+        "_history_region_id": "list-starter-history-region",
+        "_theme_selector_id": "list-starter-theme-select",
+        "_replaceable_region_ids": [
+          "list-starter-list-region",
+          "list-starter-history-region"
+        ]
+      },
+      "_preserve_object_ids": [
+        "list-starter-style-sheet",
+        "list-starter-shell",
+        "list-starter-header",
+        "list-starter-toolbar",
+        "list-starter-toolbar-actions",
+        "list-starter-primary-content",
+        "list-starter-theme-select"
+      ],
+      "_replaceable_object_ids": [
+        "list-starter-list-table",
+        "list-starter-history-table"
+      ],
+      "_adaptable_object_ids": [
+        "list-starter-header",
+        "list-starter-primary-action",
+        "list-starter-search",
+        "list-starter-status-filter",
+        "list-starter-list-region",
+        "list-starter-list-title",
+        "list-starter-history-region",
+        "list-starter-history-title",
+        "list-starter-feedback-toast"
+      ],
+      "_adaptation_targets": {
+        "_required": [
+          "_content_container_id",
+          "_page_title_id",
+          "_page_subtitle_id",
+          "_primary_list_region_id",
+          "_primary_action_id",
+          "_theme_selector_id"
+        ],
+        "_optional": [
+          "_search_control_id",
+          "_history_region_id",
+          "_toolbar_id",
+          "_feedback_toast_id",
+          "_status_filter_id"
+        ],
+        "_content_container_id": "list-starter-primary-content",
+        "_page_title_id": "list-starter-header",
+        "_page_subtitle_id": "list-starter-header",
+        "_primary_list_region_id": "list-starter-list-region",
+        "_primary_action_id": "list-starter-primary-action",
+        "_theme_selector_id": "list-starter-theme-select",
+        "_search_control_id": "list-starter-search",
+        "_history_region_id": "list-starter-history-region",
+        "_toolbar_id": "list-starter-toolbar",
+        "_feedback_toast_id": "list-starter-feedback-toast",
+        "_status_filter_id": "list-starter-status-filter"
+      },
+      "_optional_remove_object_ids": [
+        "list-starter-search",
+        "list-starter-status-filter",
+        "list-starter-history-region",
+        "list-starter-feedback-toast"
+      ],
+      "_fixed_object_ids": [
+        "list-starter-style-sheet",
+        "list-starter-shell",
+        "list-starter-header",
+        "list-starter-toolbar",
+        "list-starter-toolbar-actions",
+        "list-starter-primary-content",
+        "list-starter-theme-select"
+      ],
+      "_starter_capabilities": [
+        "server-xvm-loadable",
+        "xui-view",
+        "xdashboard-shell",
+        "list-tracker-shell",
+        "public-style",
+        "theme-selector",
+        "feedback-slot",
+        "starter-adaptation-metadata"
+      ],
+      "_required_placeholders": [
+        "<app-id>"
+      ],
+      "_optional_placeholders": [
+        "<app-name>",
+        "<app-title>",
+        "<app-description>",
+        "<app-archetype>",
+        "<app-scope>",
+        "<primary-entity>",
+        "<primary-entity-title>",
+        "<primary-view>",
+        "<primary-view-title>"
+      ],
+      "_starter_version": "1.0.0"
+    }
+  }
+}

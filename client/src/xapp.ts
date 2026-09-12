@@ -1,22 +1,26 @@
 import {
   _x,
+  _xd,
   _xem,
   _xlog,
   XUI,
   XUIRuntime,
-  _xvm,
-  XDB
+  _xvm
 } from "@xpell/ui";
 
 import { XStudioEditor } from "./studio/XStudioEditor";
 import { XDashboardPack } from "@xpell/xdashboard";
+import { createBarcodeScannerModule } from "@xpell/food-product-lookup/client";
+import VibeSystemAppActions from "./system/VibeSystemAppActions";
+import { resolveBootstrapTarget } from "./bootstrap";
+import { runtimeEditorPolicy } from "./runtime-policy";
 
 import "@xpell/ui/xui.css";
 import "@xpell/xdashboard/xdashboard.css"
 import "./style/xvibe-app.css";
 
 
-type XRuntimeMode = "runtime" | "build" | "system";
+type XRuntimeMode = "runtime" | "build" | "system" | "admin-login" | "admin-denied";
 
 
 const GOOGLE_CLIENT_ID =
@@ -27,37 +31,20 @@ const WORMHOLE_URL =
   `${window.location.protocol === "https:" ? "wss" : "ws"}://${window.location.host}/wh/v2`;
 
 
+const DEV_CONSOLE_URL =
+  import.meta.env.VITE_DEV_CONSOLE_URL ??
+  `${window.location.protocol === "https:" ? "https" : "http"}://${window.location.host}`;
+
+
 let _studio_listener_registered = false;
 
-let editor: XStudioEditor;
+let editor: XStudioEditor | null = null;
 
-function getModeByURL(): XRuntimeMode {
-  const params = new URLSearchParams(window.location.search);
-
-  if (params.get("system") === "true") return "system";
-  if (params.get("edit") === "true") return "build";
-
-  return "runtime";
-}
-
-function resolveRuntimeMode(
-  app_id: string
-): XRuntimeMode {
-
-  const url_mode = getModeByURL();
-
-  // explicit URL override wins
-  if (url_mode !== "runtime") {
-    return url_mode;
-  }
-  _xlog.log("[vibe-client] resolved runtime mode from URL:", app_id, url_mode);
-  // server fallback/system app
-  if (app_id === "vibe-system") {
-    return "system";
-  }
-
-  return "runtime";
-}
+type AdminBootstrap = {
+  _reason?: string;
+  _clearance_level?: number;
+  _required_clearance_level?: number;
+} | null;
 
 async function syncClientSkills(client: any, mode: XRuntimeMode) {
   // if (mode !== "build" && mode !== "system") return;
@@ -88,6 +75,121 @@ function readStudioPrompt(): string {
     input?._text ??
     ""
   ).trim();
+}
+
+function mountAdminAuthShell(child: HTMLElement) {
+  const shell = document.createElement("main");
+  shell.className = "admin-auth-shell";
+  shell.appendChild(child);
+  document.body.replaceChildren(shell);
+}
+
+function adminAuthPanel(title: string, subtitle: string) {
+  const panel = document.createElement("section");
+  panel.className = "admin-auth-panel";
+
+  const heading = document.createElement("h1");
+  heading.textContent = title;
+
+  const text = document.createElement("p");
+  text.textContent = subtitle;
+
+  panel.append(heading, text);
+  return panel;
+}
+
+async function renderAdminLogin(bootstrap: AdminBootstrap) {
+  const message = bootstrap?._reason === "expired_session"
+    ? "Session expired. Sign in again."
+    : "Sign in with an administrator account.";
+  const panel = adminAuthPanel("Visual Xpell Admin", message);
+  const form = document.createElement("form");
+  form.className = "admin-auth-form";
+
+  const email = document.createElement("input");
+  email.name = "email";
+  email.type = "email";
+  email.autocomplete = "username";
+  email.placeholder = "Email";
+  email.required = true;
+
+  const password = document.createElement("input");
+  password.name = "password";
+  password.type = "password";
+  password.autocomplete = "current-password";
+  password.placeholder = "Password";
+  password.required = true;
+
+  const error = document.createElement("div");
+  error.className = "admin-auth-error";
+  error.setAttribute("role", "alert");
+
+  const button = document.createElement("button");
+  button.type = "submit";
+  button.textContent = "Sign in";
+
+  form.append(email, password, error, button);
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    error.textContent = "";
+    button.disabled = true;
+
+    try {
+      const response = await fetch("/xauth/login", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({
+          email: email.value.trim(),
+          password: password.value
+        })
+      });
+
+      if (response.ok) {
+        window.location.reload();
+        return;
+      }
+
+      const body = await response.json().catch(() => null);
+      error.textContent = body?._result?._message ?? "Sign in failed.";
+    } catch {
+      error.textContent = "Sign in failed.";
+    } finally {
+      button.disabled = false;
+    }
+  });
+
+  panel.appendChild(form);
+  mountAdminAuthShell(panel);
+}
+
+function renderAdminDenied(bootstrap: AdminBootstrap) {
+  const required = bootstrap?._required_clearance_level ?? 100;
+  const current = bootstrap?._clearance_level ?? 0;
+  const panel = adminAuthPanel(
+    "Access denied",
+    `Administrator clearance ${required} is required. Current clearance: ${current}.`
+  );
+  const actions = document.createElement("div");
+  actions.className = "admin-auth-actions";
+
+  const button = document.createElement("button");
+  button.type = "button";
+  button.textContent = "Sign in again";
+  button.addEventListener("click", async () => {
+    await fetch("/xauth/logout", {
+      method: "POST",
+      credentials: "include"
+    }).catch(() => null);
+    window.location.reload();
+  });
+
+  actions.appendChild(button);
+  panel.appendChild(actions);
+  mountAdminAuthShell(panel);
 }
 
 async function requestStudioPreview(client: any) {
@@ -199,7 +301,7 @@ function registerStudioListeners(client: any) {
   _xem.on(
     "studio:close",
     () => {
-      editor.unmount();
+      editor?.unmount();
     },
     { _owner: "studio-client" }
   );
@@ -221,6 +323,16 @@ function registerStudioListeners(client: any) {
           _env: env
         });
 
+        if (typeof client.load_server_app === "function") {
+          const edit = typeof payload?._edit === "boolean" ? payload._edit : undefined;
+          await client.load_server_app(
+            app_id,
+            env,
+            typeof edit === "boolean" ? { _edit: edit } : undefined
+          );
+          return;
+        }
+
         window.location.reload();
       } catch (err) {
         _xlog.error("[vibe-client] open generated app failed", err);
@@ -231,13 +343,20 @@ function registerStudioListeners(client: any) {
 
   _xem.on(
     "vibe:generation-stage",
-    (payload:any) => {
+    (payload: any) => {
       _xlog.log(
         "[vibe-client] generation stage",
         payload
       );
     }
   );
+}
+
+function disableStudioListeners() {
+  _xem.removeOwner("studio-client");
+  _studio_listener_registered = false;
+  editor?.unmount?.();
+  editor = null;
 }
 
 
@@ -248,25 +367,55 @@ const main = async () => {
     _xlog._debug = true;
 
 
-    const saved_app = XDB.getString("xvibe.active_app") as string | undefined;
-
-    const app_id =
-      typeof saved_app === "string" && saved_app.trim().length > 0
-        ? saved_app
-        : "vibe-system";
-
-    const mode = resolveRuntimeMode(app_id);
+    const boot = await resolveBootstrapTarget({
+      _window: window as Window & Record<string, any>,
+      _document: document,
+      _fetch: fetch.bind(window),
+      _warn: (...args: any[]) => _xlog.warn(...args),
+    });
+    const app_id = boot._app_id;
+    const env = boot._env;
+    const mode = boot._mode;
+    const editor_policy = runtimeEditorPolicy(boot);
     (_x as any)._runtime_mode = mode;
+    _xlog.log("[xapp] bootstrap resolved", {
+      _source: boot._source,
+      _mode: mode,
+      _app_id: app_id,
+      _env: env,
+    });
     _xlog.log("[vibe-client] loading app", {
       _app_id: app_id,
+      _env: env,
       _mode: mode,
-      _saved_app: saved_app
+      _source: boot._source,
+      _bootstrap_mode: boot._bootstrap?._mode ?? null
     });
+
+    if (mode === "admin-login") {
+      await renderAdminLogin(boot._bootstrap);
+      return;
+    }
+
+    if (mode === "admin-denied") {
+      renderAdminDenied(boot._bootstrap);
+      return;
+    }
+
+    if (!app_id) {
+      throw new Error("[xapp] bootstrap did not resolve an app id");
+    }
+
+    _xd.set("env.dev_console_url", DEV_CONSOLE_URL);
+    const client_modules = [
+      createBarcodeScannerModule(),
+      ...(editor_policy._load_vibe_system_actions ? [new VibeSystemAppActions()] : [])
+    ];
 
     const client = await XUIRuntime.loadApp({
       _app_id: app_id,
-      _env: "default",
-      _wormhole_url:WORMHOLE_URL,
+      _env: env,
+      _wormhole_url: WORMHOLE_URL,
       _theme: "dark",
 
       onViewRendered: (view_id) => {
@@ -285,11 +434,14 @@ const main = async () => {
         _auto_start: true,
         _load_flow: true,
         _load_xvm: true,
-        _load_entity_client: true
+        _load_entity_client: true,
+        _load_studio: editor_policy._load_studio_module
       },
 
       _object_packs: [XDashboardPack],
-      _modules: [],
+      _modules: client_modules,
+      _edit: editor_policy._initial_edit,
+      _allow_edit: editor_policy._studio_enabled,
       _debug: true
     });
 
@@ -300,7 +452,11 @@ const main = async () => {
       });
     });
 
-    registerStudioListeners(client);
+    if (editor_policy._register_studio_listeners) {
+      registerStudioListeners(client);
+    } else {
+      disableStudioListeners();
+    }
 
     // if (mode === "build" || mode === "system") {
     //   try {
@@ -312,19 +468,19 @@ const main = async () => {
     //   editor.mount();
     // }
 
-    window.addEventListener("keydown", (event) => {
-      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "e") {
-        event.preventDefault();
+    // window.addEventListener("keydown", (event) => {
+    //   if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "e") {
+    //     event.preventDefault();
 
-        editor.toggle();
+    //     editor.toggle();
 
-        if (editor.mounted) {
-          void syncClientSkills(client, "build").catch((err) => {
-            _xlog.error("[vibe-client] sync client skills failed", err);
-          });
-        }
-      }
-    });
+    //     if (editor.mounted) {
+    //       void syncClientSkills(client, "build").catch((err) => {
+    //         _xlog.error("[vibe-client] sync client skills failed", err);
+    //       });
+    //     }
+    //   }
+    // });
 
     _xlog.log("[vibe-client] ready");
   } catch (err) {

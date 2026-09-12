@@ -1,0 +1,54 @@
+/* Starter-scoped product tuning; XDashboard owns structural layout. */
+
+.list-starter-primary-content {
+  --x-type-page-title-size: 32px;
+  --x-type-page-subtitle-size: 15px;
+  --x-type-section-title-size: 18px;
+  --x-type-section-subtitle-size: 14px;
+  --x-type-small-size: 14px;
+  --x-content-gap: 18px;
+  --x-density-comfortable-cell-pad-y: 12px;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.list-starter-toolbar-actions { justify-content: flex-end; min-width: 0; }
+
+.list-starter-theme-select {
+  flex: 1 1 13rem;
+  min-width: 0;
+}
+
+.list-starter-primary-action { min-height: var(--x-control-height-md); font-weight: 700; }
+
+.list-starter-search { flex: 1 1 20rem; min-width: 0; }
+
+.list-starter-status-filter {
+  flex: 1 1 11rem;
+  min-width: 0;
+}
+
+.list-starter-section { min-width: 0; }
+
+html:has(.list-starter-shell),
+body:has(.list-starter-shell) { overflow-x: hidden; }
+
+.list-starter-table .xtable__table { table-layout: fixed; }
+
+.list-starter-table .xtable__th,
+.list-starter-table .xtable__td { overflow-wrap: anywhere; }
+
+@media (max-width: 640px) {
+  .list-starter-toolbar-actions,
+  .list-starter-toolbar {
+    align-items: stretch;
+    width: 100%;
+  }
+  .list-starter-theme-select,
+  .list-starter-primary-action,
+  .list-starter-search,
+  .list-starter-status-filter {
+    flex-basis: 100%;
+    width: 100%;
+  }
+}

@@ -1,0 +1,60 @@
+/* Operations-starter tuning; XDashboard owns shell, page, section, and responsive layout. */
+
+.dashboard-main-scroll {
+  --x-page-max-width: 1180px;
+  --x-type-page-title-size: 32px;
+  --x-type-page-subtitle-size: 15px;
+  --x-type-section-title-size: 18px;
+  --x-type-section-subtitle-size: 14px;
+  --x-content-gap: 18px;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.dashboard-toolbar-actions { justify-content: flex-end; min-width: 0; }
+
+.dashboard-theme-select {
+  flex: 1 1 13rem;
+  min-width: 0;
+}
+
+.dashboard-search {
+  flex: 1 1 22rem;
+  min-width: 0;
+}
+
+.dashboard-section,
+.dashboard-secondary-grid { min-width: 0; }
+
+.dashboard-section { scroll-margin-top: 24px; }
+
+.dashboard-secondary-grid { align-items: start; }
+
+.dashboard-settings-card img { object-fit: cover; }
+
+.dashboard-settings-form,
+.dashboard-create-record-form { width: 100%; }
+
+html:has(.dashboard-shell),
+body:has(.dashboard-shell) { overflow-x: hidden; }
+
+.dashboard-table .xtable__table { table-layout: fixed; }
+
+.dashboard-table .xtable__th,
+.dashboard-table .xtable__td { overflow-wrap: anywhere; }
+
+@media (max-width: 640px) {
+  .dashboard-toolbar-actions,
+  .dashboard-toolbar {
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .dashboard-theme-select,
+  .dashboard-search,
+  .dashboard-refresh-button,
+  .dashboard-create-record-button {
+    flex-basis: 100%;
+    width: 100%;
+  }
+}

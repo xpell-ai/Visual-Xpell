@@ -1,0 +1,232 @@
+{
+  "_id": "main",
+  "_type": "view",
+  "_theme": "xdashboard-2026-dark",
+  "_requires": ["system.ready.wormhole"],
+  "_children": [
+    {
+      "_id": "list-starter-style-sheet",
+      "_type": "style-sheet",
+      "_href": "style/custom.css",
+      "_classes": {}
+    },
+    {
+      "_id": "list-starter-shell",
+      "_type": "xshell",
+      "class": "list-starter-shell",
+      "_scroll": true,
+      "_children": [
+        {
+          "_id": "list-starter-primary-content",
+          "_type": "xpage",
+          "class": "list-starter-primary-content",
+          "_width": "contained",
+          "_density": "comfortable",
+          "_children": [
+            {
+              "_id": "list-starter-header",
+              "_type": "xpage-header",
+              "_title": "<app-title>",
+              "_subtitle": "<app-description>",
+              "_density": "comfortable",
+              "_actions": [
+                {
+                  "_id": "list-starter-toolbar-actions",
+                  "_type": "igroup",
+                  "class": "list-starter-toolbar-actions",
+                  "_variant": "plain",
+                  "_density": "comfortable",
+                  "_gap": 12,
+                  "_wrap": true,
+                  "_children": [
+                    {
+                      "_id": "list-starter-theme-select",
+                      "_type": "xselect",
+                      "class": "list-starter-theme-select",
+                      "_value": "xdashboard-2026-dark",
+                      "_size": "md",
+                      "_options": [
+                        {
+                          "value": "xdashboard-2026-dark",
+                          "label": "2026 Dark"
+                        },
+                        {
+                          "value": "xdashboard-2026-light",
+                          "label": "2026 Light"
+                        },
+                        {
+                          "value": "terminal",
+                          "label": "Terminal"
+                        }
+                      ],
+                      "_on_change": {
+                        "_module": "xui",
+                        "_op": "apply-theme",
+                        "_params": {
+                          "_theme": "$data"
+                        }
+                      }
+                    },
+                    {
+                      "_id": "list-starter-primary-action",
+                      "_type": "button",
+                      "class": "list-starter-primary-action",
+                      "_text": "Add <primary-entity-title>",
+                      "_variant": "primary"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "_id": "list-starter-toolbar",
+              "_type": "toolbar",
+              "class": "list-starter-toolbar",
+              "_variant": "subtle",
+              "_density": "comfortable",
+              "_justify": "space-between",
+              "_align": "center",
+              "_wrap": true,
+              "_gap": 16,
+              "_children": [
+                {
+                  "_id": "list-starter-search",
+                  "_type": "search",
+                  "class": "list-starter-search",
+                  "_placeholder": "Search <primary-entity-title>...",
+                  "_size": "md",
+                  "_clearable": true,
+                  "_icon": true
+                },
+                {
+                  "_id": "list-starter-status-filter",
+                  "_type": "xselect",
+                  "class": "list-starter-status-filter",
+                  "_value": "all",
+                  "_size": "md",
+                  "_options": [
+                    {
+                      "value": "all",
+                      "label": "All"
+                    },
+                    {
+                      "value": "active",
+                      "label": "Active"
+                    },
+                    {
+                      "value": "completed",
+                      "label": "Completed"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "_id": "list-starter-list-region",
+              "_type": "xsection",
+              "class": "list-starter-section",
+              "_variant": "subtle",
+              "_density": "comfortable",
+              "_title": "<primary-view-title>",
+              "_subtitle": "Primary <primary-entity-title> records for the confirmed workflow.",
+              "_actions": [
+                {
+                  "_id": "list-starter-list-title",
+                  "_type": "badge",
+                  "_text": "Ready",
+                  "_variant": "success",
+                  "_size": "md",
+                  "_pill": true
+                }
+              ],
+              "_children": [
+                {
+                  "_id": "list-starter-list-table",
+                  "_type": "table",
+                  "class": "list-starter-table",
+                  "_variant": "subtle",
+                  "_density": "comfortable",
+                  "_row_key": "_id",
+                  "_columns": [
+                    {
+                      "_key": "name",
+                      "_title": "<primary-entity-title>"
+                    },
+                    {
+                      "_key": "state",
+                      "_title": "State"
+                    },
+                    {
+                      "_key": "updated_at",
+                      "_title": "Updated"
+                    }
+                  ],
+                  "_rows": [],
+                  "_empty_text": "No <primary-entity-title> records yet",
+                  "_hover": true,
+                  "_bordered": false
+                }
+              ]
+            },
+            {
+              "_id": "list-starter-history-region",
+              "_type": "xsection",
+              "class": "list-starter-section",
+              "_variant": "plain",
+              "_density": "compact",
+              "_title": "History",
+              "_subtitle": "Completed or archived <primary-entity-title> records can appear here when the plan needs them.",
+              "_actions": [
+                {
+                  "_id": "list-starter-history-title",
+                  "_type": "badge",
+                  "_text": "Optional",
+                  "_variant": "default",
+                  "_size": "sm",
+                  "_pill": true
+                }
+              ],
+              "_children": [
+                {
+                  "_id": "list-starter-history-table",
+                  "_type": "table",
+                  "class": "list-starter-table",
+                  "_variant": "plain",
+                  "_density": "compact",
+                  "_row_key": "_id",
+                  "_columns": [
+                    {
+                      "_key": "name",
+                      "_title": "<primary-entity-title>"
+                    },
+                    {
+                      "_key": "state",
+                      "_title": "State"
+                    },
+                    {
+                      "_key": "updated_at",
+                      "_title": "Updated"
+                    }
+                  ],
+                  "_rows": [],
+                  "_empty_text": "No completed records yet",
+                  "_hover": true,
+                  "_bordered": false
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_id": "list-starter-feedback-toast",
+      "_type": "toast",
+      "_open": false,
+      "_text": "List starter ready",
+      "_variant": "success",
+      "_position": "bottom-right",
+      "_closable": true
+    }
+  ]
+}

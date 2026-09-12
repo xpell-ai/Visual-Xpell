@@ -1,0 +1,14 @@
+{
+  "_id": "main",
+  "_type": "view",
+  "_theme": "terminal",
+  "_requires": ["system.ready.wormhole"],
+  "_children": [
+    {
+      "_id": "view-style-sheet",
+      "_type": "style-sheet",
+      "_href": "http://localhost:3000/public/custom.css",
+      "_classes": {}
+    }
+  ]
+}

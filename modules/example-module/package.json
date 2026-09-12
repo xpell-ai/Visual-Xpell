@@ -1,0 +1,45 @@
+{
+  "name": "@xpell/example-module",
+  "version": "0.1.0",
+  "description": "Canonical example reusable Xpell server module.",
+  "type": "module",
+  "main": "./dist/src/index.js",
+  "module": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/src/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "package.json"
+  ],
+  "scripts": {
+    "build": "tsc -p .",
+    "test": "npm run build && node dist/tests/ExampleModule.test.js"
+  },
+  "keywords": [
+    "xpell",
+    "xnode",
+    "xmodule",
+    "server-module"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@xpell/core": "workspace:*",
+    "@xpell/node": "workspace:*",
+    "@types/node": "^22.0.0",
+    "typescript": "^5.9.3"
+  },
+  "peerDependencies": {
+    "@xpell/core": ">=2.0.0",
+    "@xpell/node": ">=2.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

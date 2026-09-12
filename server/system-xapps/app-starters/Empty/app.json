@@ -1,0 +1,61 @@
+{
+  "_app_id": "empty-starter",
+  "_env": "default",
+  "_title": "Empty Starter",
+  "_system": false,
+  "_readonly": false,
+  "_version": 1,
+  "_meta": {
+    "_entry_view_id": "main",
+    "_starter": {
+      "_id": "empty",
+      "_title": "Empty Starter",
+      "_description": "Minimal valid Xpell app with one loadable main view and no domain content.",
+      "_keywords": [
+        "empty",
+        "blank",
+        "minimal",
+        "custom"
+      ],
+      "_archetypes": [
+        "empty",
+        "custom_app"
+      ],
+      "_entry_view": "main",
+      "_adaptation_strategy": {
+        "_mode": "blank-canvas",
+        "_summary": "Preserve the valid app/view shell and replace or append all planned domain content."
+      },
+      "_preserve_object_ids": [
+        "view-style-sheet"
+      ],
+      "_replaceable_object_ids": [],
+      "_adaptable_object_ids": [],
+      "_optional_remove_object_ids": [],
+      "_fixed_object_ids": [
+        "view-style-sheet"
+      ],
+      "_starter_capabilities": [
+        "server-xvm-loadable",
+        "xui-view",
+        "minimal-shell",
+        "starter-adaptation-metadata"
+      ],
+      "_required_placeholders": [
+        "<app-id>"
+      ],
+      "_optional_placeholders": [
+        "<app-name>",
+        "<app-title>",
+        "<app-description>",
+        "<app-archetype>",
+        "<app-scope>",
+        "<primary-entity>",
+        "<primary-entity-title>",
+        "<primary-view>",
+        "<primary-view-title>"
+      ],
+      "_starter_version": "1.1.0"
+    }
+  }
+}

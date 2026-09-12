@@ -5,12 +5,18 @@
   "main": "./dist/main.js",
   "scripts": {
     "build": "tsc -p .",
+    "test": "npm run build && node dist/test-starter-contract.js",
+    "test:starters": "npm run test",
     "start": "node dist/main.js",
     "dev": "tsc -p . && node dist/main.js"
   },
   "dependencies": {
-    "@xpell/node": "^2.0.3",
-    "@xpell/xai-providers": "^2.0.4",
+    "@xpell/node": "workspace:*",
+    "@xpell/example-module": "workspace:*",
+    "@xpell/food-product-lookup": "workspace:*",
+    "@xpell/ui": "workspace:*",
+    "@xpell/vibe": "workspace:*",
+    "@xpell/xai-providers": "workspace:*",
     "dotenv": "^17.4.2"
   },
   "devDependencies": {
@@ -18,6 +24,6 @@
     "@types/node": "^22.0.0"
   },
   "peerDependencies": {
-    "@xpell/core": "^2.0.3"
+    "@xpell/core": "workspace:*"
   }
 }

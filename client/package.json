@@ -6,18 +6,20 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "node tests/bootstrap.test.mjs && node tests/runtime-bundle.test.mjs"
   },
   "license": "MIT",
   "dependencies": {
-    "@xpell/ui": "^2.0.3",
-    "@xpell/xdashboard": "^2.0.3"
+    "@xpell/food-product-lookup": "workspace:*",
+    "@xpell/ui": "workspace:*",
+    "@xpell/xdashboard": "workspace:*"
   },
   "peerDependencies": {
-    "@xpell/core": "^2.0.3"
+    "@xpell/core": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.9.3",
-    "vite": "^7.3.5"
+    "vite": "^7.3.6"
   }
 }
